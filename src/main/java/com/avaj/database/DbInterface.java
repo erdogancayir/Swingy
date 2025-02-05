@@ -14,10 +14,8 @@ public abstract class DbInterface {
 
     protected DbInterface() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(DB_URL, USER, PASS);
-                System.out.println("✅ H2 Database connected successfully.");
-            }
+            connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("✅ H2 Database connected successfully.");
         } catch (Exception e) {
             throw new RuntimeException("Failed to connect to H2 database", e);
         }
@@ -45,6 +43,7 @@ public abstract class DbInterface {
     }
 
     public int executeUpdate(String query) {
+
         try (Statement statement = connection.createStatement()) {
             return statement.executeUpdate(query);
         } catch (SQLException e) {

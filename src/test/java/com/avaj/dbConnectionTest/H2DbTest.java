@@ -24,10 +24,14 @@ public class H2DbTest {
     }
 
     @BeforeEach
-    void cleanDatabase() {
-        try (Connection conn = heroManager.getConnection();
-             Statement stmt = conn.createStatement()) {
+    void cleanDatabase() throws SQLException {
+        System.out.println("🧹 Cleaning database - Is connection open? " + !heroManager.getConnection().isClosed());
+
+        try {
+            Connection conn = heroManager.getConnection();  // ✅ Bağlantıyı al
+            Statement stmt = conn.createStatement();
             stmt.executeUpdate("DELETE FROM Heroes");
+            System.out.println("🧹 All records deleted.");
         } catch (SQLException e) {
             System.err.println("⚠️ WARNING: 'Heroes' table not found or could not be cleared.");
         }
