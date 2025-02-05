@@ -1,7 +1,6 @@
 package com.avaj.database;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class HeroManager extends DbInterface {
 
@@ -35,5 +34,9 @@ public class HeroManager extends DbInterface {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Connection getConnection() {
+        return super.getConnection();
     }
 }
