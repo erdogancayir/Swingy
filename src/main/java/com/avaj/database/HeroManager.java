@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class HeroManager extends DbInterface {
 
     public HeroManager() {
-        super(); // DbInterface Constructor'ı çağırır.
+        super();
     }
 
     public void createHeroesTable() {
