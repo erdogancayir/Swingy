@@ -3,7 +3,6 @@ package com.avaj.database;
 import java.sql.*;
 
 public abstract class DbInterface {
-    private static final String JDBC_DRIVER = "org.h2.Driver";
     private static final String DB_URL = "jdbc:h2:./src/main/resources/HeroesDB/HeroesH2";
     private static final String USER = "sa";
     private static final String PASS = "";

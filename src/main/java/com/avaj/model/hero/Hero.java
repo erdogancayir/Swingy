@@ -42,12 +42,12 @@ public abstract class Hero
     }
 
     public void equipArtifact(Artifact artifact) {
-        if (artifact instanceof Weapon) {
-            this.attack += artifact.getBoost();
+        if (artifact instanceof Weapon weapon) {
+           // this.attack += weapon.getBoost();
         } else if (artifact instanceof Armor) {
-            this.defense += artifact.getBoost();
+            //this.defense += artifact.getBoost();
         } else if (artifact instanceof Helm) {
-            this.hitPoints += artifact.getBoost();
+            //this.hitPoints += artifact.getBoost();
         }
     }
 
