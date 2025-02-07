@@ -1,12 +1,13 @@
 package com.avaj.hero;
 
 import com.avaj.database.HeroManager;
-import com.avaj.dbConnectionTest.H2DbTest;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -44,11 +45,27 @@ public class HeroTest
 
     @Test
     @Order(1)
-    void CreateHero()
+    void CreateAndInsertHero()
     {
         heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100);
         heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80);
         heroManager.insertHero("Shadow", "Rogue", 1, 0, 18, 7, 90);
+
+        heroManager.printAllHeroes();
+    }
+
+    @Test
+    @Order(2)
+    void RemoveHero()
+    {
+        heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100);
+        heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80);
+        heroManager.insertHero("Shadow", "Rogue", 1, 0, 18, 7, 90);
+
+        heroManager.removeHero("Merlin");
+
+        var totalHeroCount = heroManager.getHeroCount();
+        assertEquals(2, totalHeroCount, "Total hero count of db is not expected value");
 
         heroManager.printAllHeroes();
     }

@@ -43,6 +43,30 @@ public class HeroManager extends DbInterface {
         }
     }
 
+    public void removeHero(String name) {
+        String removeQuery = "DELETE FROM Heroes WHERE name = ?";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(removeQuery)) {
+            stmt.setString(1, name);
+            stmt.executeUpdate();
+            System.out.println("✅ Hero removed successfully.");
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error removing hero", e);
+        }
+    }
+
+    // get hero count
+    public int getHeroCount() {
+        String selectQuery = "SELECT COUNT(*) FROM Heroes";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(selectQuery); ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error retrieving hero count", e);
+        }
+        return 0;
+    }
+
     public void printAllHeroes() {
         String selectQuery = "SELECT * FROM Heroes";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(selectQuery); ResultSet rs = stmt.executeQuery()) {
