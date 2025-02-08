@@ -1,6 +1,10 @@
 package com.avaj.hero;
 
 import com.avaj.database.HeroManager;
+import com.avaj.model.artifact.Armor;
+import com.avaj.model.artifact.Helm;
+import com.avaj.model.artifact.Weapon;
+import com.avaj.model.hero.Warrior;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -56,7 +60,7 @@ public class HeroTest
 
     @Test
     @Order(2)
-    void RemoveHero()
+    void testRemoveHeroAndValidate()
     {
         heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100);
         heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80);
@@ -68,5 +72,35 @@ public class HeroTest
         assertEquals(2, totalHeroCount, "Total hero count of db is not expected value");
 
         heroManager.printAllHeroes();
+    }
+
+    @Test
+    @Order(3)
+    void testHeroLevelUp() {
+        Warrior testHero = new Warrior("Warrior") {};
+        testHero.gainExperience(1500);
+
+        assertEquals(2, testHero.getLevel(), "Hero should level up to 2");
+        assertEquals(20, testHero.getAttack(), "Attack should increase by 5");
+        assertEquals(15, testHero.getDefense(), "Defense should increase by 5");
+        assertEquals(110, testHero.getHitPoints(), "Hit points should increase by 10");
+    }
+
+    @Test
+    @Order(4)
+    void testEquipArtifact() {
+        Warrior testHero = new Warrior("Warrior") {};
+
+        Weapon sword = new Weapon("Excalibur", 10);
+        Armor shield = new Armor("Dragon Shield", 5);
+        Helm helmet = new Helm("Golden Helm", 7);
+
+        testHero.equipArtifact(sword);
+        testHero.equipArtifact(shield);
+        testHero.equipArtifact(helmet);
+
+        assertEquals(25, testHero.getAttack(), "Weapon should increase attack");
+        assertEquals(15, testHero.getDefense(), "Armor should increase defense");
+        assertEquals(107, testHero.getHitPoints(), "Helm should increase hit points");
     }
 }

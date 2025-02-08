@@ -4,7 +4,6 @@ import lombok.Getter;
 
 public abstract class Artifact {
     protected String name;
-    @Getter
     protected int boost;
 
     public Artifact(String name, int boost) {
@@ -15,5 +14,9 @@ public abstract class Artifact {
     @Override
     public String toString() {
         return name + " (+" + boost + ")";
+    }
+
+    public int getBoost() {
+        return boost;
     }
 }

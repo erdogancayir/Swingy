@@ -4,6 +4,7 @@ import com.avaj.model.artifact.Armor;
 import com.avaj.model.artifact.Artifact;
 import com.avaj.model.artifact.Helm;
 import com.avaj.model.artifact.Weapon;
+import lombok.Getter;
 
 public abstract class Hero
 {
@@ -43,12 +44,40 @@ public abstract class Hero
 
     public void equipArtifact(Artifact artifact) {
         if (artifact instanceof Weapon weapon) {
-           // this.attack += weapon.getBoost();
+            this.attack += weapon.getBoost();
         } else if (artifact instanceof Armor) {
-            //this.defense += artifact.getBoost();
+            this.defense += artifact.getBoost();
         } else if (artifact instanceof Helm) {
-            //this.hitPoints += artifact.getBoost();
+            this.hitPoints += artifact.getBoost();
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getHeroClass() {
+        return heroClass;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getHitPoints() {
+        return hitPoints;
     }
 
     @Override
