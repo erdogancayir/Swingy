@@ -51,9 +51,9 @@ public class HeroTest
     @Order(1)
     void CreateAndInsertHero()
     {
-        heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100);
-        heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80);
-        heroManager.insertHero("Shadow", "Rogue", 1, 0, 18, 7, 90);
+        heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100, 1, 1);
+        heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80, 1, 1);
+        heroManager.insertHero("Shadow", "Rogue", 1, 0, 18, 7, 90, 1, 1);
 
         heroManager.printAllHeroes();
     }
@@ -62,9 +62,9 @@ public class HeroTest
     @Order(2)
     void testRemoveHeroAndValidate()
     {
-        heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100);
-        heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80);
-        heroManager.insertHero("Shadow", "Rogue", 1, 0, 18, 7, 90);
+        heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100, 1, 1);
+        heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80, 2, 2);
+        heroManager.insertHero("Shadow", "Rogue", 1, 0, 18, 7, 90, 2, 2);
 
         heroManager.removeHero("Merlin");
 
@@ -102,5 +102,19 @@ public class HeroTest
         assertEquals(25, testHero.getAttack(), "Weapon should increase attack");
         assertEquals(15, testHero.getDefense(), "Armor should increase defense");
         assertEquals(107, testHero.getHitPoints(), "Helm should increase hit points");
+    }
+
+    @Test
+    @Order(5)
+    void testListHeroes() {
+        heroManager.insertHero("Arthur", "Warrior", 1, 0, 15, 10, 100, 3, 3);
+        heroManager.insertHero("Merlin", "Mage", 1, 0, 20, 5, 80, 4, 4);
+        heroManager.insertHero("Shadow", "Rogue", 1, 0, 18, 7, 90, 2, 2);
+
+        var heroes = heroManager.getAllHeroes();
+        assertEquals(3, heroes.size(), "Total heroes should be 3");
+
+        System.out.println("✅ Hero list:");
+        heroes.forEach(System.out::println);
     }
 }

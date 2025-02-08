@@ -4,7 +4,7 @@ import com.avaj.model.artifact.Armor;
 import com.avaj.model.artifact.Artifact;
 import com.avaj.model.artifact.Helm;
 import com.avaj.model.artifact.Weapon;
-import lombok.Getter;
+import com.avaj.model.map.Direction;
 
 public abstract class Hero
 {
@@ -15,6 +15,8 @@ public abstract class Hero
     protected int attack;
     protected int defense;
     protected int hitPoints;
+    protected int x;
+    protected int y;
 
     public Hero(String name, String heroClass, int attack, int defense, int hitPoints) {
         this.name = name;
@@ -40,6 +42,20 @@ public abstract class Hero
         this.defense += 5;
         this.hitPoints += 10;
         System.out.println(name + " leveled up to " + level + "!");
+    }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int[] getNewPosition(Direction direction) {
+        return switch (direction) {
+            case NORTH -> new int[]{x - 1, y};
+            case SOUTH -> new int[]{x + 1, y};
+            case EAST -> new int[]{x, y + 1};
+            case WEST -> new int[]{x, y - 1};
+        };
     }
 
     public void equipArtifact(Artifact artifact) {
@@ -79,6 +95,9 @@ public abstract class Hero
     public int getHitPoints() {
         return hitPoints;
     }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
 
     @Override
     public String toString() {

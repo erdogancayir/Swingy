@@ -1,5 +1,6 @@
 package com.avaj;
 
+import com.avaj.controller.HeroSpawnController;
 import com.avaj.database.HeroManager;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -10,14 +11,17 @@ public class Main {
 
     public static void main(String[] args) {
         HeroManager heroManager = new HeroManager();
-        heroManager.createHeroesTable();
 
         boolean guiMode = parseArguments(args);
 
-        if (guiMode) {
-            System.out.println("Launching GUI mode...");
-        } else {
-            System.out.println("Launching Console mode...");
+        new HeroSpawnController(guiMode);
+
+        while (true) {
+            try {
+                Thread.sleep(1000); // CPU'yu boşa yormamak için 1 saniye bekle
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

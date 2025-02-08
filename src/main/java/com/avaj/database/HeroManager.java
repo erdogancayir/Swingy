@@ -1,31 +1,52 @@
 package com.avaj.database;
+import com.avaj.model.hero.Hero;
+import com.avaj.model.hero.Mage;
+import com.avaj.model.hero.Rogue;
+import com.avaj.model.hero.Warrior;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeroManager extends DbInterface {
 
     public HeroManager() {
         super();
+        createHeroesTable();
+
+        Warrior warrior = new Warrior("Warrior");
+        Mage mage = new Mage("Mage");
+        Rogue rogue = new Rogue("Rogue");
+
+        AddHeroToDb(warrior);
+        AddHeroToDb(mage);
+        AddHeroToDb(rogue);
     }
 
     public void createHeroesTable() {
         String createTableQuery = "CREATE TABLE IF NOT EXISTS Heroes ("
                 + "id INT PRIMARY KEY AUTO_INCREMENT, "
                 + "name VARCHAR(255) NOT NULL, "
-                + "\"HERO_CLASS\" VARCHAR(50) NOT NULL, "  // Büyük harf için düzeltildi
+                + "\"HERO_CLASS\" VARCHAR(50) NOT NULL, "  // ✅ HERO_CLASS büyük harf olduğu için tırnak içinde
                 + "level INT NOT NULL, "
                 + "experience INT NOT NULL, "
                 + "attack INT NOT NULL, "
                 + "defense INT NOT NULL, "
-                + "hit_points INT NOT NULL"
+                + "hit_points INT NOT NULL, "  // ✅ Eksik olan virgül eklendi
+                + "\"POSITION_X\" INT NOT NULL, "  // ✅ Büyük harf için çift tırnak eklendi
+                + "\"POSITION_Y\" INT NOT NULL"    // ✅ Büyük harf için çift tırnak eklendi
                 + ")";
 
         executeUpdate(createTableQuery);
         System.out.println("✅ Heroes table created or already exists.");
     }
 
-    public void insertHero(String name, String heroClass, int level, int experience, int attack, int defense, int hitPoints) {
-       // String insertQuery = "INSERT INTO Heroes (name, hero_class, level, experience, attack, defense, hit_points) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String insertQuery = "INSERT INTO Heroes (name, \"HERO_CLASS\", level, experience, attack, defense, hit_points) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public void AddHeroToDb(Hero warrior) {
+        insertHero(warrior.getName(), warrior.getHeroClass(), warrior.getLevel(), warrior.getExperience(), warrior.getAttack(), warrior.getDefense(), warrior.getHitPoints(), 0, 0);
+    }
+
+    public void insertHero(String name, String heroClass, int level, int experience, int attack, int defense, int hitPoints, int x, int y) {
+        String insertQuery = "INSERT INTO Heroes (name, \"HERO_CLASS\", level, experience, attack, defense, hit_points, \"POSITION_X\", \"POSITION_Y\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
             stmt.setString(1, name);
@@ -35,11 +56,28 @@ public class HeroManager extends DbInterface {
             stmt.setInt(5, attack);
             stmt.setInt(6, defense);
             stmt.setInt(7, hitPoints);
+            stmt.setInt(8, x);  // ✅ X pozisyonu ekleme
+            stmt.setInt(9, y);  // ✅ Y pozisyonu ekleme
 
             stmt.executeUpdate();
             System.out.println("✅ Hero inserted successfully.");
         } catch (SQLException e) {
             throw new RuntimeException("❌ Error inserting hero", e);
+        }
+    }
+
+    public void updateHeroPosition(String name, int newX, int newY) {
+        String updateQuery = "UPDATE Heroes SET \"POSITION_X\" = ?, \"POSITION_Y\" = ? WHERE name = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setInt(1, newX);
+            stmt.setInt(2, newY);
+            stmt.setString(3, name);
+
+            stmt.executeUpdate();
+            System.out.println("✅ Hero position updated in database.");
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error updating hero position", e);
         }
     }
 
@@ -56,15 +94,32 @@ public class HeroManager extends DbInterface {
 
     // get hero count
     public int getHeroCount() {
-        String selectQuery = "SELECT COUNT(*) FROM Heroes";
-        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(selectQuery); ResultSet rs = stmt.executeQuery()) {
+        String query = "SELECT COUNT(*) FROM Heroes";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("❌ Error retrieving hero count", e);
+            throw new RuntimeException("❌ Error counting heroes", e);
         }
         return 0;
+    }
+
+    public List<String> getAllHeroes() {
+        List<String> heroes = new ArrayList<>();
+        String query = "SELECT name FROM Heroes";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                heroes.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error fetching hero list", e);
+        }
+        return heroes;
     }
 
     public void printAllHeroes() {
