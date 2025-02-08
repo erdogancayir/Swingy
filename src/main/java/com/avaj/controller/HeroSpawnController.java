@@ -2,7 +2,7 @@ package com.avaj.controller;
 
 import com.avaj.database.HeroManager;
 import com.avaj.view.gui.SpawnHeroGuiView;
-import com.avaj.model.map.Map;
+import com.avaj.model.hero.Hero;
 
 public class HeroSpawnController
 {
@@ -13,13 +13,26 @@ public class HeroSpawnController
     {
         this.isGuiMode = isGuiMode;
         this.heroManager = heroManager;
-
-        OpenSpawnHeroGui();
     }
 
-    public void OpenSpawnHeroGui() {
+    public Hero OpenSpawnHeroGui() {
         if (isGuiMode) {
-            spawnHeroGuiView = new SpawnHeroGuiView(heroManager.GetAllHeroesArrayList());
+            SpawnHeroGuiView spawnHeroGuiView = new SpawnHeroGuiView(heroManager.GetAllHeroesArrayList());
+
+            // 📌 Kullanıcı seçim yapana kadar pencerenin kapanmasını bekle
+            while (spawnHeroGuiView.getSelectedHero() == null) {
+                try {
+                    Thread.sleep(500); // CPU'yu boşa yormamak için 500ms bekle
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Hero selectedHero = spawnHeroGuiView.getSelectedHero();
+            System.out.println("✅ Selected Hero: " + selectedHero.getName());
+
+            return selectedHero;
         }
+        return null;
     }
 }

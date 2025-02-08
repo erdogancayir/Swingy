@@ -29,6 +29,10 @@ public class SpawnHeroGuiView {
         updateTable();
     }
 
+    public Hero getSelectedHero() {
+        return selectedHero;
+    }
+
     // 📌 Arayüzü başlatma metodu
     private void initializeUI() {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

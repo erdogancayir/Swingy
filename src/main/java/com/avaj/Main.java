@@ -2,6 +2,7 @@ package com.avaj;
 
 import com.avaj.controller.HeroSpawnController;
 import com.avaj.database.HeroManager;
+import com.avaj.model.hero.Hero;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -14,14 +15,10 @@ public class Main {
 
         var heroManager = new HeroManager();
         var heroSpawnController = new HeroSpawnController(heroManager, guiMode);
+        Hero selectedHero = heroSpawnController.OpenSpawnHeroGui();
 
-        while (true) {
-            try {
-                Thread.sleep(1000); // CPU'yu boşa yormamak için 1 saniye bekle
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+
+        System.out.println("Selected hero: " + selectedHero.getName());
     }
 
     private static boolean parseArguments(String[] args) {
