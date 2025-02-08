@@ -1,8 +1,11 @@
 package com.avaj;
 
+import com.avaj.controller.GameController;
 import com.avaj.controller.HeroSpawnController;
+import com.avaj.controller.ValidationController;
 import com.avaj.database.HeroManager;
 import com.avaj.model.hero.Hero;
+import com.avaj.model.map.Map;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -17,8 +20,11 @@ public class Main {
         var heroSpawnController = new HeroSpawnController(heroManager, guiMode);
         Hero selectedHero = heroSpawnController.OpenSpawnHeroGui();
 
+        Map gameMap = new Map(selectedHero);
 
-        System.out.println("Selected hero: " + selectedHero.getName());
+        ValidationController validationController = new ValidationController();
+
+        GameController gameController = new GameController(gameMap, selectedHero, heroManager, validationController, guiMode);
     }
 
     private static boolean parseArguments(String[] args) {

@@ -6,16 +6,36 @@ import com.avaj.model.artifact.Helm;
 import com.avaj.model.artifact.Weapon;
 import com.avaj.model.map.Direction;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public abstract class Hero
 {
     private String avatarPath;
+
+    @NotNull(message = "Hero name cannot be null.")
+    @Size(min = 3, max = 20, message = "Hero name must be between 3 and 20 characters.")
     protected String name;
+
+    @NotNull(message = "Hero class cannot be null.")
     protected String heroClass;
+
+    @Min(value = 1, message = "Level must be at least 1.")
     protected int level;
+
+    @Min(value = 0, message = "Experience cannot be negative.")
     protected int experience;
+
+    @Min(value = 1, message = "Attack value must be at least 1.")
     protected int attack;
+
+    @Min(value = 1, message = "Defense value must be at least 1.")
     protected int defense;
+
+    @Min(value = 10, message = "Hit points must be at least 10.")
     protected int hitPoints;
+
     protected int x;
     protected int y;
 
@@ -115,6 +135,14 @@ public abstract class Hero
 
     public String getAvatarPath() {
         return avatarPath;
+    }
+
+    public void SetLevel(int level) {
+        this.level = level;
+    }
+
+    public void SetHitPoints(int hitPoints) {
+        this.hitPoints = hitPoints;
     }
 
     public int getX() { return x; }
