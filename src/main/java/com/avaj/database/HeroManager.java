@@ -12,6 +12,7 @@ public class HeroManager extends DbInterface {
 
     public HeroManager() {
         super();
+
         createHeroesTable();
 
         Warrior warrior = new Warrior("Warrior");
@@ -41,9 +42,30 @@ public class HeroManager extends DbInterface {
         System.out.println("✅ Heroes table created or already exists.");
     }
 
-    public void AddHeroToDb(Hero warrior) {
-        insertHero(warrior.getName(), warrior.getHeroClass(), warrior.getLevel(), warrior.getExperience(), warrior.getAttack(), warrior.getDefense(), warrior.getHitPoints(), 0, 0);
+    public void AddHeroToDb(Hero hero) {
+        if (!isHeroExists(hero.getName())) {  // Eğer kahraman yoksa ekle
+            insertHero(hero.getName(), hero.getHeroClass(), hero.getLevel(), hero.getExperience(), hero.getAttack(), hero.getDefense(), hero.getHitPoints(), 0, 0);
+        } else {
+            System.out.println("⚠️ Hero already exists: " + hero.getName());
+        }
     }
+
+    public boolean isHeroExists(String name) {
+        String query = "SELECT COUNT(*) FROM Heroes WHERE name = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, name);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error checking if hero exists", e);
+        }
+        return false;
+    }
+
 
     public void insertHero(String name, String heroClass, int level, int experience, int attack, int defense, int hitPoints, int x, int y) {
         String insertQuery = "INSERT INTO Heroes (name, \"HERO_CLASS\", level, experience, attack, defense, hit_points, \"POSITION_X\", \"POSITION_Y\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -119,6 +141,43 @@ public class HeroManager extends DbInterface {
         } catch (SQLException e) {
             throw new RuntimeException("❌ Error fetching hero list", e);
         }
+        return heroes;
+    }
+
+    public ArrayList<Hero> GetAllHeroesArrayList()
+    {
+        var heroes = new ArrayList<Hero>();
+        String query = "SELECT * FROM Heroes";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String heroClass = rs.getString("hero_class");
+                int level = rs.getInt("level");
+                int experience = rs.getInt("experience");
+                int attack = rs.getInt("attack");
+                int defense = rs.getInt("defense");
+                int hitPoints = rs.getInt("hit_points");
+                int positionX = rs.getInt("POSITION_X");
+                int positionY = rs.getInt("POSITION_Y");
+
+                Hero hero = switch (heroClass.toLowerCase()) {
+                    case "mage" ->
+                            new Mage(name, heroClass, level, experience, attack, defense, hitPoints, positionX, positionY);
+                    case "warrior" ->
+                            new Warrior(name, level, experience, attack, defense, hitPoints, positionX, positionY);
+                    case "rogue" ->
+                            new Rogue(name, level, experience, attack, defense, hitPoints, positionX, positionY);
+                    default -> throw new RuntimeException("❌ Unknown hero class: " + heroClass);
+                };
+
+                heroes.add(hero);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error fetching hero list", e);
+        }
+
         return heroes;
     }
 

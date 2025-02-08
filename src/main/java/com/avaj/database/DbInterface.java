@@ -30,18 +30,10 @@ public abstract class DbInterface {
         }
     }
 
-    public ResultSet executeQuery(String query) {
-        try {
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(query);
-        } catch (SQLException e) {
-            throw new RuntimeException("Query execution failed: " + query, e);
-        }
-    }
-
     public int executeUpdate(String query) {
 
-        try (Statement statement = connection.createStatement()) {
+        try (Connection conn = getConnection();  // Her seferinde yeni bağlantı al
+             Statement statement = conn.createStatement()) {
             return statement.executeUpdate(query);
         } catch (SQLException e) {
             throw new RuntimeException("Update execution failed: " + query, e);

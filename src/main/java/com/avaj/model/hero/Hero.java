@@ -18,7 +18,7 @@ public abstract class Hero
     protected int x;
     protected int y;
 
-    public Hero(String name, String heroClass, int attack, int defense, int hitPoints) {
+    public Hero(String name, String heroClass, int attack, int defense, int hitPoints, int x, int y) {
         this.name = name;
         this.heroClass = heroClass;
         this.level = 1;
@@ -26,6 +26,18 @@ public abstract class Hero
         this.attack = attack;
         this.defense = defense;
         this.hitPoints = hitPoints;
+    }
+
+    public Hero(String name, String heroClass, int level, int experience, int attack, int defense, int hitPoints, int x, int y) {
+        this.name = name;
+        this.heroClass = heroClass;
+        this.level = level;
+        this.experience = experience;
+        this.attack = attack;
+        this.defense = defense;
+        this.hitPoints = hitPoints;
+        this.x = x;
+        this.y = y;
     }
 
     public void gainExperience(int xp) {

@@ -1,3 +1,0 @@
-2025-02-08 10:59:33 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "HEROES" not found (this database is empty); SQL statement:
-UPDATE Heroes SET "POSITION_X" = ?, "POSITION_Y" = ? WHERE name = ? [42104-214]

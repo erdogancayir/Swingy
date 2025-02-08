@@ -10,11 +10,10 @@ public class Main {
     private static final String CONSOLE_MODE = "console";
 
     public static void main(String[] args) {
-        HeroManager heroManager = new HeroManager();
-
         boolean guiMode = parseArguments(args);
 
-        new HeroSpawnController(guiMode);
+        var heroManager = new HeroManager();
+        var heroSpawnController = new HeroSpawnController(heroManager, guiMode);
 
         while (true) {
             try {
