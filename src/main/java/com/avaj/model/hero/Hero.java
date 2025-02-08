@@ -8,6 +8,7 @@ import com.avaj.model.map.Direction;
 
 public abstract class Hero
 {
+    private String avatarPath;
     protected String name;
     protected String heroClass;
     protected int level;
@@ -80,6 +81,10 @@ public abstract class Hero
         }
     }
 
+    public void SetAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
     public String getName() {
         return name;
     }
@@ -106,6 +111,10 @@ public abstract class Hero
 
     public int getHitPoints() {
         return hitPoints;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
     }
 
     public int getX() { return x; }
