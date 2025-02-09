@@ -160,4 +160,8 @@ public abstract class Hero
                 ", hitPoints=" + hitPoints +
                 '}';
     }
+
+    public void Heal() {
+        hitPoints = hitPoints;
+    }
 }

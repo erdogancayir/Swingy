@@ -16,6 +16,7 @@ public class SpawnHeroGuiView {
     private final JFrame frame;
     private final ArrayList<Hero> heroesList;
     private JTable table;
+    private Hero heroSelectedOnRow;
     private Hero selectedHero;
     private JLabel avatarLabel;
 
@@ -29,14 +30,14 @@ public class SpawnHeroGuiView {
         updateTable();
     }
 
-    public Hero getSelectedHero() {
+    public Hero getHeroSelectedOnRow() {
         return selectedHero;
     }
 
     // 📌 Arayüzü başlatma metodu
     private void initializeUI() {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(900, 900);
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null); // Pencereyi ekran ortasına getir
         frame.setLayout(new BorderLayout());
 
@@ -53,8 +54,8 @@ public class SpawnHeroGuiView {
             public void valueChanged(ListSelectionEvent event) {
                 int row = table.getSelectedRow();
                 if (row >= 0 && row < heroesList.size()) {
-                    selectedHero = heroesList.get(row);
-                    displayHeroStats(selectedHero);
+                    heroSelectedOnRow = heroesList.get(row);
+                    displayHeroStats(heroSelectedOnRow);
                 }
             }
         });
@@ -85,8 +86,9 @@ public class SpawnHeroGuiView {
 
         // 📌 Butona tıklanınca çalışacak işlem
         selectButton.addActionListener(e -> {
-            if (selectedHero != null) {
-                JOptionPane.showMessageDialog(frame, "🎉 Selected Hero: " + selectedHero.getName(),
+            if (heroSelectedOnRow != null) {
+                selectedHero = heroSelectedOnRow;
+                JOptionPane.showMessageDialog(frame, "🎉 Selected Hero: " + heroSelectedOnRow.getName(),
                         "Hero Selected", JOptionPane.INFORMATION_MESSAGE);
                 frame.dispose(); // Pencereyi kapat
             } else {

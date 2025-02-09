@@ -25,6 +25,7 @@ public class Main {
         ValidationController validationController = new ValidationController();
 
         GameController gameController = new GameController(gameMap, selectedHero, heroManager, validationController, guiMode);
+        gameController.StartGame();
     }
 
     private static boolean parseArguments(String[] args) {

@@ -20,7 +20,7 @@ public class HeroSpawnController
             SpawnHeroGuiView spawnHeroGuiView = new SpawnHeroGuiView(heroManager.GetAllHeroesArrayList());
 
             // 📌 Kullanıcı seçim yapana kadar pencerenin kapanmasını bekle
-            while (spawnHeroGuiView.getSelectedHero() == null) {
+            while (spawnHeroGuiView.getHeroSelectedOnRow() == null) {
                 try {
                     Thread.sleep(500); // CPU'yu boşa yormamak için 500ms bekle
                 } catch (InterruptedException e) {
@@ -28,7 +28,7 @@ public class HeroSpawnController
                 }
             }
 
-            Hero selectedHero = spawnHeroGuiView.getSelectedHero();
+            Hero selectedHero = spawnHeroGuiView.getHeroSelectedOnRow();
             System.out.println("✅ Selected Hero: " + selectedHero.getName());
 
             return selectedHero;

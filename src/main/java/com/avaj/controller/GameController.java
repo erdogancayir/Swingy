@@ -3,6 +3,7 @@ package com.avaj.controller;
 import com.avaj.database.HeroManager;
 import com.avaj.model.map.Map;
 import com.avaj.model.hero.*;
+import com.avaj.view.gui.GameGuiView;
 
 public class GameController
 {
@@ -11,6 +12,7 @@ public class GameController
     private Hero hero;
     private boolean isGuiMode;
     private ValidationController validationController;
+    private GameGuiView gameGuiView;
 
     public GameController(Map map, Hero hero, HeroManager heroManager, ValidationController validationController, boolean isGuiMode) {
         this.heroManager = heroManager;
@@ -22,5 +24,18 @@ public class GameController
         this.validationController.validate(this.hero);
     }
 
-    
+
+    public void StartGame()
+    {
+        //this.hero.Heal();
+        if (isGuiMode)
+        {
+            OpenUi();
+        }
+    }
+
+    public void OpenUi()
+    {
+        gameGuiView = new GameGuiView(hero, map, heroManager);
+    }
 }
