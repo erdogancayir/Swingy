@@ -155,6 +155,13 @@ public class GameGuiView {
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
                 cell.setOpaque(true);
 
+                if (!map.isVisible(i, j)) {
+                    cell.setText("❌"); // 📌 Görülmeyen yerler
+                    cell.setBackground(new Color(0, 0, 0));
+                } else {
+                    cell.setBackground(Color.WHITE);
+                }
+
                 mapPanel.add(cell);
             }
         }
@@ -164,7 +171,7 @@ public class GameGuiView {
 
     // 📌 Harita hücrelerini simgeyle göster
     private String getMapSymbol(int x, int y) {
-        if (!map.isVisible(x, y)) return "❓";  // Görülmeyen yerler
+        if (!map.isVisible(x, y)) return "❌";  // Görülmeyen yerler
 
         switch (map.getGrid(x, y)) {
             case GameGlobalInstance.HERO:
@@ -173,8 +180,6 @@ public class GameGuiView {
                 return "👹";  // Düşman
             case GameGlobalInstance.ARTIFACT:
                 return "⚔️";  // Artefakt
-            case GameGlobalInstance.UNKNOWN:
-                return "❓";  // Bilinmeyen alan
             default:
                 return "🌱";  // Boş alan
         }

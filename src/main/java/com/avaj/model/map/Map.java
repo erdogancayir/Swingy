@@ -14,7 +14,7 @@ public class Map
     private final boolean[][] visibility;
     private final Hero hero;
     private final Random random = new Random();
-    private final int visionRange = 3; // 🔥 Kahramanın görüş mesafesi
+    private final int visionRange = 1; // 🔥 Kahramanın görüş mesafesi
 
     public Map(Hero hero) {
         this.hero = hero;
@@ -25,8 +25,10 @@ public class Map
     }
 
     private void initializeMap() {
-        fillGridWithUnknown();
-        placeHeroAtCenter();
+        int center = size / 2;
+
+        fillGridWithEmpty();
+        placeHeroAtCenter(center);
         placeRandomEntities(VILLAIN, size / 5);
         placeRandomEntities(ARTIFACT, size / 10);
         updateVisibility(); // Kahramanın etrafını açığa çıkar
@@ -36,19 +38,27 @@ public class Map
         return (level - 1) * 5 + 10 - (level % 2);
     }
 
-    private void fillGridWithUnknown() {
+    private void fillGridWithEmpty() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                grid[i][j] = UNKNOWN;  // 🎭 Başlangıçta her yer bilinmez
-                visibility[i][j] = false;
+                grid[i][j] = EMPTY;
+                visibility[i][j] = false; // 🔥 Her şey başlangıçta görünmez olacak
             }
         }
     }
 
     private void updateVisibility() {
+        // 📌 Önce tüm haritayı kapat
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                visibility[i][j] = false;
+            }
+        }
+
         int heroX = hero.getX();
         int heroY = hero.getY();
 
+        // 📌 Yeni görüş alanını aç
         for (int dx = -visionRange; dx <= visionRange; dx++) {
             for (int dy = -visionRange; dy <= visionRange; dy++) {
                 int nx = heroX + dx;
@@ -60,8 +70,8 @@ public class Map
         }
     }
 
-    private void placeHeroAtCenter() {
-        int center = size / 2;
+
+    private void placeHeroAtCenter(int center) {
         hero.setPosition(center, center);
         grid[center][center] = HERO;
         visibility[center][center] = true; // Kahramanın başladığı nokta görülebilir
@@ -69,17 +79,15 @@ public class Map
 
     private void placeRandomEntities(char entity, int count) {
         for (int i = 0; i < count; i++) {
-            int x, y;
-            do {
-                x = random.nextInt(size);
-                y = random.nextInt(size);
-            } while (grid[x][y] != UNKNOWN); // 🎯 Sadece bilinmeyen yerlere yerleştir
+            int x = random.nextInt(size);
+            int y = random.nextInt(size);
+
             grid[x][y] = entity;
         }
     }
 
     public boolean isVisible(int x, int y) {
-        return visibility[x][y] || grid[x][y] != UNKNOWN;
+        return visibility[x][y];
     }
 
     public void moveHero(Direction direction, HeroManager heroManager) {
