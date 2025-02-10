@@ -9,6 +9,8 @@ import com.avaj.model.map.Map;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.avaj.model.GameGlobalInstance.*;
+
 public class GameGuiView {
     private final JFrame frame;
     private final Hero hero;
@@ -70,7 +72,14 @@ public class GameGuiView {
         gameLog.setEditable(false);
         gameLog.setFont(new Font("Arial", Font.PLAIN, 16)); // 📌 Yazı büyütüldü
         gameLog.setMargin(new Insets(10, 10, 10, 10)); // Kenar boşluğu
-        gameLog.setText("Game started...\n");
+
+        var gameStartLog = "";
+        gameStartLog += "Game started...\n";
+        gameStartLog += "🔮Artifacts: " + "Take any artifact.\n";
+        gameStartLog += "🤺Hero: " + "It is your hero.\n";
+        gameStartLog += "👹Enemy: " + "Start a battle.\n";
+
+        gameLog.setText(gameStartLog);
 
         rightPanel.add(new JScrollPane(gameLog), BorderLayout.CENTER);
 
@@ -90,10 +99,10 @@ public class GameGuiView {
 
     // 📌 Hareket butonlarını ekle
     private void addControlButtons() {
-        JButton northButton = createMovementButton("⬆ North", Direction.NORTH);
-        JButton southButton = createMovementButton("⬇ South", Direction.SOUTH);
-        JButton eastButton = createMovementButton("➡ East", Direction.EAST);
-        JButton westButton = createMovementButton("⬅ West", Direction.WEST);
+        JButton northButton = createMovementButton("\u2B06 North", Direction.NORTH);
+        JButton southButton = createMovementButton("\u2B07  South", Direction.SOUTH);
+        JButton eastButton = createMovementButton("\u27A1 East", Direction.EAST);
+        JButton westButton = createMovementButton("\u2B05 West", Direction.WEST);
 
         // 📌 Boş butonlar (merkez hariç her köşeye)
         controlPanel.add(new JLabel(""));
@@ -116,7 +125,7 @@ public class GameGuiView {
         button.setForeground(Color.BLUE);
         button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
 
-        // 📌 Butona tıklanınca `Direction` enum ile kahraman hareket edecek
+        // 📌 Butona tıklanınca Direction enum ile kahraman hareket edecek
         button.addActionListener(e -> moveHero(direction));
 
         return button;
@@ -150,39 +159,67 @@ public class GameGuiView {
         mapPanel.removeAll(); // Mevcut içeriği temizle
         for (int i = 0; i < map.getSize(); i++) {
             for (int j = 0; j < map.getSize(); j++) {
-                JLabel cell = new JLabel(getMapSymbol(i, j), SwingConstants.CENTER);
-                cell.setFont(new Font("Arial", Font.BOLD, 24));
-                cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-                cell.setOpaque(true);
-
-                if (!map.isVisible(i, j)) {
-                    cell.setText("❌"); // 📌 Görülmeyen yerler
-                    cell.setBackground(new Color(0, 0, 0));
-                } else {
-                    cell.setBackground(Color.WHITE);
-                }
-
-                mapPanel.add(cell);
+                mapPanel.add(getMapSymbol(i, j));
             }
         }
         mapPanel.revalidate();
         mapPanel.repaint();
     }
 
-    // 📌 Harita hücrelerini simgeyle göster
-    private String getMapSymbol(int x, int y) {
-        if (!map.isVisible(x, y)) return "❌";  // Görülmeyen yerler
+    private void updateEnemyInfo(int x, int y) {
+        int[] enemyPosition = map.getNearbyEnemyPosition(x, y);
+        if (enemyPosition != null)
+        {
 
-        switch (map.getGrid(x, y)) {
-            case GameGlobalInstance.HERO:
-                return "🤺";  // Kahraman
-            case GameGlobalInstance.VILLAIN:
-                return "👹";  // Düşman
-            case GameGlobalInstance.ARTIFACT:
-                return "⚔️";  // Artefakt
-            default:
-                return "🌱";  // Boş alan
         }
+    }
+
+    // 📌 Harita hücrelerini simgeyle göster
+    private JLabel getMapSymbol(int x, int y) {
+        JLabel label = new JLabel();
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+
+        String imagePath; // Varsayılan resim
+
+        if (!map.isVisible(x, y)) {
+            imagePath = UNVISIBLE_ICON_PATH;
+        } else {
+            switch (map.getGrid(x, y)) {
+                case GameGlobalInstance.HERO:
+                    imagePath = hero.getAvatarPath();
+                    break;
+                case GameGlobalInstance.VILLAIN:
+                    imagePath = VILLAIN_ICON_PATH;
+                    break;
+                case GameGlobalInstance.VILLAIN2:
+                    imagePath = VILLAIN2_ICON_PATH;
+                    break;
+                case GameGlobalInstance.VILLAIN3:
+                    imagePath = VILLAIN3_ICON_PATH;
+                    break;
+                case GameGlobalInstance.VILLAIN4:
+                    imagePath = VILLAIN4_ICON_PATH;
+                    break;
+                case GameGlobalInstance.VILLAIN5:
+                    imagePath = VILLAIN5_ICON_PATH;
+                    break;
+                case GameGlobalInstance.VILLAIN6:
+                    imagePath = VILLAIN6_ICON_PATH;
+                    break;
+                case GameGlobalInstance.ARTIFACT:
+                    imagePath = ARTIFACT_ICON_PATH;
+                    break;
+                default:
+                    imagePath = EMPTY_ICON_PATH;
+                    break;
+            }
+        }
+
+        // Resmi önbellekten al
+        label.setIcon(GameGlobalInstance.getImage(imagePath));
+
+        return label;
     }
 
     // 📌 Avatarı Güncelle

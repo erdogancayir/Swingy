@@ -14,7 +14,7 @@ public class Map
     private final boolean[][] visibility;
     private final Hero hero;
     private final Random random = new Random();
-    private final int visionRange = 1; // 🔥 Kahramanın görüş mesafesi
+    private final int visionRange = 2; // 🔥 Kahramanın görüş mesafesi
 
     public Map(Hero hero) {
         this.hero = hero;
@@ -30,6 +30,17 @@ public class Map
         fillGridWithEmpty();
         placeHeroAtCenter(center);
         placeRandomEntities(VILLAIN, size / 5);
+        placeRandomEntities(VILLAIN2, size / 5);
+        placeRandomEntities(VILLAIN2, size / 5);
+        placeRandomEntities(VILLAIN2, size / 5);
+        placeRandomEntities(VILLAIN3, size / 5);
+        placeRandomEntities(VILLAIN3, size / 5);
+        placeRandomEntities(VILLAIN4, size / 5);
+        placeRandomEntities(VILLAIN4, size / 5);
+        placeRandomEntities(VILLAIN5, size / 5);
+        placeRandomEntities(VILLAIN6, size / 5);
+        placeRandomEntities(VILLAIN6, size / 5);
+        placeRandomEntities(ARTIFACT, size / 10);
         placeRandomEntities(ARTIFACT, size / 10);
         updateVisibility(); // Kahramanın etrafını açığa çıkar
     }
@@ -64,10 +75,16 @@ public class Map
                 int nx = heroX + dx;
                 int ny = heroY + dy;
                 if (isValidMove(nx, ny)) {
-                    visibility[nx][ny] = true;
+                    // Rastgele bir düzen oluştur, örneğin 2 üstten, 1 alttan, çapraz açık kalsın
+                    if (random.nextBoolean() || (dx == -2 || dy == -1 || (dx == -1 && dy == -1))) {
+                        visibility[nx][ny] = true;
+                    }
                 }
             }
         }
+
+        // 📌 Kahramanın olduğu hücreyi her zaman görünür yap
+        visibility[heroX][heroY] = true;
     }
 
 
@@ -135,4 +152,32 @@ public class Map
     public char getGrid(int x, int y) {
         return grid[x][y];
     }
+
+    public int[] getNearbyEnemyPosition(int x, int y) {
+        int[][] directions = {
+                {-1, -1}, {-1, 0}, {-1, 1},  // Sol üst, üst, sağ üst
+                {0, -1},          {0, 1},   // Sol, sağ
+                {1, -1}, {1, 0}, {1, 1}     // Sol alt, alt, sağ alt
+        };
+
+        for (int[] dir : directions) {
+            int newX = x + dir[0];
+            int newY = y + dir[1];
+
+            if (isWithinBounds(newX, newY) && isEnemy(grid[newX][newY])) {
+                return new int[]{newX, newY};  // Düşmanın koordinatlarını döndür
+            }
+        }
+        return null; // Eğer düşman yoksa null döndür
+    }
+
+    private boolean isEnemy(char cell) {
+        return cell == VILLAIN || cell == VILLAIN2 || cell == VILLAIN3 ||
+                cell == VILLAIN4 || cell == VILLAIN5 || cell == VILLAIN6;
+    }
+
+    private boolean isWithinBounds(int x, int y) {
+        return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length;
+    }
 }
+

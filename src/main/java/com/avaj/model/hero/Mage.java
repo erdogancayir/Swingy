@@ -1,5 +1,7 @@
 package com.avaj.model.hero;
 
+import com.avaj.model.GameGlobalInstance;
+
 public class Mage extends Hero
 {
     public Mage(String name) {
@@ -13,6 +15,6 @@ public class Mage extends Hero
     }
 
     public void SetAvatarPath() {
-        super.SetAvatarPath("./src/main/resources/assets/avatars/Mage.png");
+        super.SetAvatarPath(GameGlobalInstance.HERO_ICON_PATH);
     }
 }

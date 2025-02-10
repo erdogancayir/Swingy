@@ -1,5 +1,7 @@
 package com.avaj.model.hero;
 
+import com.avaj.model.GameGlobalInstance;
+
 public class Warrior extends Hero {
     public Warrior(String name) {
         super(name, "Warrior", 15, 10, 100, 0, 0);
@@ -12,6 +14,6 @@ public class Warrior extends Hero {
     }
 
     public void SetAvatarPath() {
-        super.SetAvatarPath("./src/main/resources/assets/avatars/Warrior.png");
+        super.SetAvatarPath(GameGlobalInstance.HERO3_ICON_PATH);
     }
 }

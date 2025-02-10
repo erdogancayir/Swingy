@@ -1,5 +1,7 @@
 package com.avaj.model.hero;
 
+import com.avaj.model.GameGlobalInstance;
+
 public class Rogue extends Hero {
     public Rogue(String name) {
         super(name, "Rogue", 10, 5, 80, 0, 0);
@@ -12,6 +14,6 @@ public class Rogue extends Hero {
     }
 
     public void SetAvatarPath() {
-        super.SetAvatarPath("./src/main/resources/assets/avatars/Rogue.png");
+        super.SetAvatarPath(GameGlobalInstance.HERO2_ICON_PATH);
     }
 }
