@@ -174,8 +174,8 @@ public class GameGuiView {
             updateEnemyInfo(newX, newY); // 📌 Hareket sonrası düşman bilgilerini güncelle
 
             char cellContent = map.getGrid(newX, newY);
-            if (cellContent == GameGlobalInstance.VILLAIN) {
-                gameLog.append("⚔️ Battle! A villain is here!\n");
+            if (map.isEnemy(cellContent)) {
+                handleVillainEncounter(newX, newY);
             } else if (cellContent == GameGlobalInstance.ARTIFACT) {
                 gameLog.append("✨ Found an artifact! Do you want to keep it?\n");
             }
@@ -183,6 +183,62 @@ public class GameGuiView {
             gameLog.append("⛔ Cannot move there!\n");
         }
     }
+
+    private void handleVillainEncounter(int x, int y) {
+        gameLog.append("⚔️ A villain blocks your path!\n");
+
+        int option = JOptionPane.showOptionDialog(frame,
+                "You encountered a villain! What will you do?",
+                "Villain Encounter",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                new String[]{"Fight", "Run"},
+                "Fight");
+
+        if (option == JOptionPane.NO_OPTION) {
+            // 📌 Kaçmayı dene (50% şans)
+            if (Math.random() < 0.5) {
+                gameLog.append("🏃 You successfully escaped!\n");
+                return;
+            } else {
+                gameLog.append("❌ Escape failed! You must fight.\n");
+            }
+        }
+
+        // 📌 Savaş Başlat
+        boolean heroWon = simulateBattle();
+
+        if (heroWon) {
+            gameLog.append("🎉 You defeated the villain!\n");
+            hero.gainExperience(50); // 📌 Villain gücüne göre XP
+            updateHeroStats();
+
+            // 📌 Artefakt kazanma şansı
+            if (Math.random() < 0.3) {
+                gameLog.append("✨ You found an artifact! Do you want to keep it?\n");
+            }
+
+            // 📌 Düşman yenildi, haritadan kaldır
+            //map.removeVillain(x, y);
+            updateMap();
+        } else {
+            gameLog.append("💀 You lost the battle... Game Over.\n");
+            JOptionPane.showMessageDialog(frame, "You have been defeated!", "Game Over", JOptionPane.ERROR_MESSAGE);
+            System.exit(0); // 📌 Oyun bitir
+        }
+    }
+
+    private boolean simulateBattle() {
+        int heroPower = hero.getLevel() * 10 + (int) (Math.random() * 10);
+        int villainPower = 30 + (int) (Math.random() * 20); // 📌 Düşmanın gücü değişken
+
+        gameLog.append("⚔️ Battle starts! Hero Power: " + heroPower + ", Villain Power: " + villainPower + "\n");
+
+        return heroPower >= villainPower; // 📌 Güçleri karşılaştır
+    }
+
+
     private void updateMap() {
         mapPanel.removeAll();
         for (int i = 0; i < map.getSize(); i++) {
@@ -255,7 +311,7 @@ public class GameGuiView {
 
     private void updateEnemyInfo(int x, int y) {
         int[] enemyPosition = map.getNearbyEnemyPosition(x, y);
-        if (enemyPosition != null) {
+        if (enemyPosition != null && map.isVisible(enemyPosition[0], enemyPosition[1])) {
             // 📌 Düşman Avatarını Güncelle
             updateEnemyAvatar(map.getEnemyPath(enemyPosition[0], enemyPosition[1]));
 

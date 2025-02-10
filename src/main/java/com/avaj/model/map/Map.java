@@ -186,7 +186,7 @@ public class Map
             return VILLAIN6_ICON_PATH;
     }
 
-    private boolean isEnemy(char cell) {
+    public boolean isEnemy(char cell) {
         return cell == VILLAIN || cell == VILLAIN2 || cell == VILLAIN3 ||
                 cell == VILLAIN4 || cell == VILLAIN5 || cell == VILLAIN6;
     }
