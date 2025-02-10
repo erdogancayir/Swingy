@@ -1,7 +1,6 @@
 package com.avaj.model.map;
 import com.avaj.database.HeroManager;
 import com.avaj.model.hero.Hero;
-import com.avaj.model.GameGlobalInstance;
 
 import java.util.Random;
 
@@ -14,7 +13,7 @@ public class Map
     private final boolean[][] visibility;
     private final Hero hero;
     private final Random random = new Random();
-    private final int visionRange = 2; // 🔥 Kahramanın görüş mesafesi
+    private final int visionRange = 1; // 🔥 Kahramanın görüş mesafesi
 
     public Map(Hero hero) {
         this.hero = hero;
@@ -169,6 +168,22 @@ public class Map
             }
         }
         return null; // Eğer düşman yoksa null döndür
+    }
+
+    public String getEnemyPath(int x, int y)
+    {
+        if (grid[x][y] == VILLAIN)
+            return VILLAIN_ICON_PATH;
+        else if (grid[x][y] == VILLAIN2)
+            return VILLAIN2_ICON_PATH;
+        else if (grid[x][y] == VILLAIN3)
+            return VILLAIN3_ICON_PATH;
+        else if (grid[x][y] == VILLAIN4)
+            return VILLAIN4_ICON_PATH;
+        else if (grid[x][y] == VILLAIN5)
+            return VILLAIN5_ICON_PATH;
+        else
+            return VILLAIN6_ICON_PATH;
     }
 
     private boolean isEnemy(char cell) {
