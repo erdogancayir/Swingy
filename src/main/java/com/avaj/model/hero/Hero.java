@@ -36,6 +36,10 @@ public abstract class Hero
     @Min(value = 10, message = "Hit points must be at least 10.")
     protected int hitPoints;
 
+    protected int bonusAttack;
+    protected int bonusDefense;
+    protected int bonusHitPoints;
+
     protected int x;
     protected int y;
 
@@ -93,11 +97,11 @@ public abstract class Hero
 
     public void equipArtifact(Artifact artifact) {
         if (artifact instanceof Weapon weapon) {
-            this.attack += weapon.getBoost();
+            this.bonusAttack += weapon.getBoost();
         } else if (artifact instanceof Armor) {
-            this.defense += artifact.getBoost();
+            this.bonusDefense += artifact.getBoost();
         } else if (artifact instanceof Helm) {
-            this.hitPoints += artifact.getBoost();
+            this.bonusHitPoints += artifact.getBoost();
         }
     }
 
@@ -122,15 +126,15 @@ public abstract class Hero
     }
 
     public int getAttack() {
-        return attack;
+        return attack + bonusAttack;
     }
 
     public int getDefense() {
-        return defense;
+        return defense + bonusDefense;
     }
 
     public int getHitPoints() {
-        return hitPoints;
+        return hitPoints + bonusHitPoints;
     }
 
     public String getAvatarPath() {

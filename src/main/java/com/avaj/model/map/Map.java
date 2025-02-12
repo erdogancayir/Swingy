@@ -27,7 +27,6 @@ public class Map
         int center = size / 2;
 
         fillGridWithEmpty();
-        placeHeroAtCenter(center);
         placeRandomEntities(VILLAIN, size / 5);
         placeRandomEntities(VILLAIN2, size / 5);
         placeRandomEntities(VILLAIN2, size / 5);
@@ -39,8 +38,10 @@ public class Map
         placeRandomEntities(VILLAIN5, size / 5);
         placeRandomEntities(VILLAIN6, size / 5);
         placeRandomEntities(VILLAIN6, size / 5);
-        placeRandomEntities(ARTIFACT, size / 10);
-        placeRandomEntities(ARTIFACT, size / 10);
+        placeRandomEntities(ARTIFACT, size / 3);
+
+        placeHeroAtCenter(center);
+
         updateVisibility(); // Kahramanın etrafını açığa çıkar
     }
 

@@ -50,6 +50,30 @@ public class HeroManager extends DbInterface {
         }
     }
 
+    public void updateHeroStatus(String name, int level, int experience, int attack, int defense, int hitPoints, int x, int y) {
+        String updateQuery = "UPDATE Heroes SET level = ?, experience = ?, attack = ?, defense = ?, hit_points = ?, \"POSITION_X\" = ?, \"POSITION_Y\" = ? WHERE name = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setInt(1, level);
+            stmt.setInt(2, experience);
+            stmt.setInt(3, attack);
+            stmt.setInt(4, defense);
+            stmt.setInt(5, hitPoints);
+            stmt.setInt(6, x);
+            stmt.setInt(7, y);
+            stmt.setString(8, name);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("✅ Hero status updated successfully.");
+            } else {
+                System.out.println("⚠️ No hero found with the given name.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error updating hero status", e);
+        }
+    }
+
     public boolean isHeroExists(String name) {
         String query = "SELECT COUNT(*) FROM Heroes WHERE name = ?";
         try (Connection conn = getConnection();
