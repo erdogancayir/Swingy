@@ -82,6 +82,8 @@ public class BattleController {
                             hero.getName() + "Your hero won the battle!",
                             "Victory",
                             JOptionPane.INFORMATION_MESSAGE);
+
+                    gameController.getGameGuiView().UpdateHeroStatAfterVictory(enemy);
                     battleView.enableExit();
                 }
             }
