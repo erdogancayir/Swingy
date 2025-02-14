@@ -1,9 +1,13 @@
 package com.avaj.controller;
 
 import com.avaj.database.HeroManager;
+import com.avaj.model.enemy.Enemy;
 import com.avaj.model.map.Map;
 import com.avaj.model.hero.*;
+import com.avaj.view.gui.BattleGuiView;
 import com.avaj.view.gui.GameGuiView;
+
+import javax.swing.*;
 
 public class GameController
 {
@@ -36,6 +40,18 @@ public class GameController
 
     public void OpenUi()
     {
-        gameGuiView = new GameGuiView(hero, map, heroManager);
+        gameGuiView = new GameGuiView(hero, map, heroManager, this);
+    }
+
+    public void startBattle(Enemy enemy) {
+        SwingUtilities.invokeLater(() -> {
+            BattleGuiView battleView = new BattleGuiView(hero, enemy);
+            BattleController battleController = new BattleController(hero, enemy, battleView, this);
+            battleController.startBattle();
+        });
+    }
+
+    public GameGuiView getGameGuiView() {
+        return gameGuiView;
     }
 }

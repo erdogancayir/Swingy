@@ -40,6 +40,8 @@ public abstract class Hero
     protected int bonusDefense;
     protected int bonusHitPoints;
 
+    private final int baseHitPoint;
+
     protected int x;
     protected int y;
 
@@ -51,6 +53,7 @@ public abstract class Hero
         this.attack = attack;
         this.defense = defense;
         this.hitPoints = hitPoints;
+        this.baseHitPoint = hitPoints;
     }
 
     public Hero(String name, String heroClass, int level, int experience, int attack, int defense, int hitPoints, int x, int y) {
@@ -61,6 +64,7 @@ public abstract class Hero
         this.attack = attack;
         this.defense = defense;
         this.hitPoints = hitPoints;
+        this.baseHitPoint = hitPoints;
         this.x = x;
         this.y = y;
     }
@@ -166,6 +170,19 @@ public abstract class Hero
     }
 
     public void Heal() {
-        hitPoints = hitPoints;
+        this.hitPoints = baseHitPoint;
+    }
+
+    public int getMaxHp() {
+        return 0;
+    }
+
+    public int getDefence() {
+        return defense;
+    }
+
+    public void takeDamage(int enemyDamage)
+    {
+        hitPoints -= enemyDamage;
     }
 }

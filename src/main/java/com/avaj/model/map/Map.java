@@ -1,10 +1,12 @@
 package com.avaj.model.map;
 import com.avaj.database.HeroManager;
+import com.avaj.model.enemy.Enemy;
 import com.avaj.model.hero.Hero;
 
 import java.util.Random;
 
 import static com.avaj.model.GameGlobalInstance.*;
+import static com.avaj.model.enemy.EnemyFactory.createEnemyForHero;
 
 public class Map
 {
@@ -27,20 +29,21 @@ public class Map
         int center = size / 2;
 
         fillGridWithEmpty();
-        placeRandomEntities(VILLAIN, size / 5);
-        placeRandomEntities(VILLAIN2, size / 5);
-        placeRandomEntities(VILLAIN2, size / 5);
-        placeRandomEntities(VILLAIN2, size / 5);
-        placeRandomEntities(VILLAIN3, size / 5);
-        placeRandomEntities(VILLAIN3, size / 5);
-        placeRandomEntities(VILLAIN4, size / 5);
-        placeRandomEntities(VILLAIN4, size / 5);
-        placeRandomEntities(VILLAIN5, size / 5);
-        placeRandomEntities(VILLAIN6, size / 5);
-        placeRandomEntities(VILLAIN6, size / 5);
+
+        placeRandomEntities(GhostEnemy, size / 5);
+        placeRandomEntities(ZombieGirlEnemy, size / 5);
+        placeRandomEntities(ZombieGirlEnemy, size / 5);
+        placeRandomEntities(ZombieGirlEnemy, size / 5);
+        placeRandomEntities(BlueEnemy, size / 5);
+        placeRandomEntities(BlueEnemy, size / 5);
+        placeRandomEntities(GreenEnemy, size / 5);
+        placeRandomEntities(GreenEnemy, size / 5);
+        placeRandomEntities(PurpleVILLAIN, size / 5);
+        placeRandomEntities(ZombieGuyVILLAIN, size / 5);
+        placeRandomEntities(ZombieGuyVILLAIN, size / 5);
         placeRandomEntities(ARTIFACT, size / 3);
 
-        placeHeroAtCenter(center);
+        placeHeroAtCenter(hero.getX(), hero.getY());
 
         updateVisibility(); // Kahramanın etrafını açığa çıkar
     }
@@ -88,10 +91,10 @@ public class Map
     }
 
 
-    private void placeHeroAtCenter(int center) {
-        hero.setPosition(center, center);
-        grid[center][center] = HERO;
-        visibility[center][center] = true; // Kahramanın başladığı nokta görülebilir
+    private void placeHeroAtCenter(int x, int y) {
+        hero.setPosition(x, y);
+        grid[x][y] = HERO;
+        visibility[x][y] = true; // Kahramanın başladığı nokta görülebilir
     }
 
     private void placeRandomEntities(char entity, int count) {
@@ -135,7 +138,7 @@ public class Map
 
     private void handleEncounter(int x, int y) {
         switch (grid[x][y]) {
-            case VILLAIN -> System.out.println("⚔️ You encountered a villain! Prepare for battle!");
+            case GhostEnemy -> System.out.println("⚔️ You encountered a villain! Prepare for battle!");
             case ARTIFACT -> System.out.println("✨ You found an artifact! Do you want to keep it?");
             default -> {}
         }
@@ -173,27 +176,43 @@ public class Map
 
     public String getEnemyPath(int x, int y)
     {
-        if (grid[x][y] == VILLAIN)
-            return VILLAIN_ICON_PATH;
-        else if (grid[x][y] == VILLAIN2)
-            return VILLAIN2_ICON_PATH;
-        else if (grid[x][y] == VILLAIN3)
-            return VILLAIN3_ICON_PATH;
-        else if (grid[x][y] == VILLAIN4)
-            return VILLAIN4_ICON_PATH;
-        else if (grid[x][y] == VILLAIN5)
-            return VILLAIN5_ICON_PATH;
+        if (grid[x][y] == GhostEnemy)
+            return GhostEnemyICON_PATH;
+        else if (grid[x][y] == ZombieGirlEnemy)
+            return ZombieGirlEnemy_ICON_PATH;
+        else if (grid[x][y] == BlueEnemy)
+            return BlueEnemy_Icon_Path;
+        else if (grid[x][y] == GreenEnemy)
+            return GreenEnemy_ICON_PATH;
+        else if (grid[x][y] == PurpleVILLAIN)
+            return PurpleVILLAIN5_ICON_PATH;
         else
-            return VILLAIN6_ICON_PATH;
+            return ZombieVILLAIN6_ICON_Path;
     }
 
     public boolean isEnemy(char cell) {
-        return cell == VILLAIN || cell == VILLAIN2 || cell == VILLAIN3 ||
-                cell == VILLAIN4 || cell == VILLAIN5 || cell == VILLAIN6;
+        return cell == GhostEnemy || cell == ZombieGirlEnemy || cell == BlueEnemy ||
+                cell == GreenEnemy || cell == PurpleVILLAIN || cell == ZombieGuyVILLAIN;
     }
 
     private boolean isWithinBounds(int x, int y) {
         return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length;
+    }
+
+    public Enemy getEnemyAt(int x, int y)
+    {
+        if (grid[x][y] == GhostEnemy)
+            return createEnemyForHero(hero, GhostEnemyICON_PATH, 1, "Ghost Villain");
+        else if (grid[x][y] == ZombieGirlEnemy)
+            return createEnemyForHero(hero, ZombieGirlEnemy_ICON_PATH, 2, "Zombie Girl");
+        else if (grid[x][y] == BlueEnemy)
+            return createEnemyForHero(hero, BlueEnemy_Icon_Path, 3, "Blue Villain");
+        else if (grid[x][y] == GreenEnemy)
+            return createEnemyForHero(hero, GreenEnemy_ICON_PATH, 4, "Green Villain");
+        else if (grid[x][y] == PurpleVILLAIN)
+            return createEnemyForHero(hero, PurpleVILLAIN5_ICON_PATH,5, "Purple Villain");
+        else
+            return createEnemyForHero(hero, ZombieVILLAIN6_ICON_Path, 6, "Zombie Boy");
     }
 }
 
