@@ -44,7 +44,7 @@ public class HeroManager extends DbInterface {
 
     public void AddHeroToDb(Hero hero) {
         if (!isHeroExists(hero.getName())) {  // Eğer kahraman yoksa ekle
-            insertHero(hero.getName(), hero.getHeroClass(), hero.getLevel(), hero.getExperience(), hero.getAttack(), hero.getDefense(), hero.getHitPoints(), 0, 0);
+            insertHero(hero.getName(), hero.getHeroClass(), hero.getLevel(), hero.getExperience(), hero.getAttack(), hero.getDefense(), hero.getHitPoints(), hero.getX(), hero.getY());
         } else {
             System.out.println("⚠️ Hero already exists: " + hero.getName());
         }

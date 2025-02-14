@@ -5,7 +5,7 @@ import com.avaj.model.GameGlobalInstance;
 public class Mage extends Hero
 {
     public Mage(String name) {
-        super(name, "Mage", 5, 3, 50, 0, 0);
+        super(name, "Mage", 5, 3, 50, 4, 4);
         SetAvatarPath();
     }
 

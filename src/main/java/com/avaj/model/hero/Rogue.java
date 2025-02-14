@@ -4,7 +4,7 @@ import com.avaj.model.GameGlobalInstance;
 
 public class Rogue extends Hero {
     public Rogue(String name) {
-        super(name, "Rogue", 10, 5, 80, 0, 0);
+        super(name, "Rogue", 10, 5, 80, 4, 4);
         SetAvatarPath();
     }
 

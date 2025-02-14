@@ -6,7 +6,7 @@ public class Enemy
 
     protected String name;
     protected String heroClass;
-    protected int level;
+    protected int strength;
     protected int attack;
     protected int defense;
     protected int hitPoints;
@@ -42,8 +42,8 @@ public class Enemy
         return attack;
     }
 
-    public int getLevel() {
-        return level;
+    public int getStrength() {
+        return strength;
     }
 
     public String getAvatarPath() {

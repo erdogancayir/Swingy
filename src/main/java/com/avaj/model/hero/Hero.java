@@ -54,6 +54,8 @@ public abstract class Hero
         this.defense = defense;
         this.hitPoints = hitPoints;
         this.baseHitPoint = hitPoints;
+        this.x = x;
+        this.y = y;
     }
 
     public Hero(String name, String heroClass, int level, int experience, int attack, int defense, int hitPoints, int x, int y) {
