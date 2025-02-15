@@ -7,17 +7,15 @@ import com.avaj.database.HeroManager;
 import com.avaj.model.hero.Hero;
 import com.avaj.model.map.Map;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    private static final String GUI_MODE = "gui";
-    private static final String CONSOLE_MODE = "console";
+import static com.avaj.model.GameGlobalInstance.CONSOLE_MODE;
+import static com.avaj.model.GameGlobalInstance.GUI_MODE;
 
+public class Main {
     public static void main(String[] args) {
         boolean guiMode = parseArguments(args);
-
         var heroManager = new HeroManager();
         var heroSpawnController = new HeroSpawnController(heroManager, guiMode);
+
         Hero selectedHero = heroSpawnController.OpenSpawnHeroGui();
 
         Map gameMap = new Map(selectedHero);
@@ -25,6 +23,7 @@ public class Main {
         ValidationController validationController = new ValidationController();
 
         GameController gameController = new GameController(gameMap, selectedHero, heroManager, validationController, guiMode);
+
         gameController.StartGame();
     }
 

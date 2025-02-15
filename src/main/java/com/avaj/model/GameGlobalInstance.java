@@ -1,5 +1,9 @@
 package com.avaj.model;
+import com.avaj.model.hero.Hero;
+import com.avaj.model.hero.Warrior;
+
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 
@@ -27,6 +31,9 @@ public class GameGlobalInstance
     public static final String ZombieVILLAIN6_ICON_Path = "./src/main/resources/assets/enemy6.png";
     public static final String ARTIFACT_ICON_PATH = "./src/main/resources/assets/Arti.png";
     public static final String UNVISIBLE_ICON_PATH = "./src/main/resources/assets/Ghost.png";
+
+    public static final String GUI_MODE = "gui";
+    public static final String CONSOLE_MODE = "console";
 
     private static final HashMap<String, ImageIcon> cache = new HashMap<>();
 
@@ -70,5 +77,4 @@ public class GameGlobalInstance
 
         return logPanel;
     }
-
 }

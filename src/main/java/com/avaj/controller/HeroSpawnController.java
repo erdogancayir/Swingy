@@ -1,14 +1,15 @@
 package com.avaj.controller;
 
 import com.avaj.database.HeroManager;
+import com.avaj.view.console.SpawnHeroConsole;
 import com.avaj.view.gui.SpawnHeroGuiView;
 import com.avaj.model.hero.Hero;
 
 public class HeroSpawnController
 {
-    private SpawnHeroGuiView spawnHeroGuiView;
     private final boolean isGuiMode;
     private final HeroManager heroManager;
+
     public HeroSpawnController(HeroManager heroManager, boolean isGuiMode)
     {
         this.isGuiMode = isGuiMode;
@@ -33,6 +34,12 @@ public class HeroSpawnController
 
             return selectedHero;
         }
-        return null;
+        else
+        {
+            SpawnHeroConsole spawnHeroConsole = new SpawnHeroConsole(heroManager.GetAllHeroesArrayList(), heroManager);
+            Hero hero = spawnHeroConsole.spawnHero();
+
+            return hero;
+        }
     }
 }

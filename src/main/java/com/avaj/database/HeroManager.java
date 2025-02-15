@@ -226,4 +226,19 @@ public class HeroManager extends DbInterface {
     public Connection getConnection() {
         return super.getConnection();
     }
+
+    public void deleteHero(Hero heroToDelete) {
+        String deleteQuery = "DELETE FROM Heroes WHERE name = ?";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(deleteQuery)) {
+            stmt.setString(1, heroToDelete.getName());
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("✅ Hero deleted successfully: " + heroToDelete.getName());
+            } else {
+                System.out.println("⚠️ No hero found with the given name: " + heroToDelete.getName());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Error deleting hero", e);
+        }
+    }
 }
