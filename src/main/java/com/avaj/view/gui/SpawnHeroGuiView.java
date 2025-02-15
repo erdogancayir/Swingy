@@ -1,11 +1,12 @@
 package com.avaj.view.gui;
 
-import com.avaj.model.hero.Hero;
+import com.avaj.database.HeroManager;
+import com.avaj.model.hero.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionListener;
@@ -18,12 +19,11 @@ public class SpawnHeroGuiView {
     private JTable table;
     private Hero heroSelectedOnRow;
     private Hero selectedHero;
-    private JLabel avatarLabel;
+    private final HeroManager heroManager;
 
-    private Hero hero;
-
-    public SpawnHeroGuiView(ArrayList<Hero> heroesList) {
+    public SpawnHeroGuiView(ArrayList<Hero> heroesList, HeroManager heroManager) {
         this.heroesList = heroesList;
+        this.heroManager = heroManager;
         this.frame = new JFrame("Spawn New Hero");
 
         initializeUI();
@@ -38,14 +38,14 @@ public class SpawnHeroGuiView {
     private void initializeUI() {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 600);
-        frame.setLocationRelativeTo(null); // Pencereyi ekran ortasına getir
+        frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
 
         // 📌 Tablo oluşturuluyor
         table = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        table.setFont(new Font("Arial", Font.BOLD, 18)); // Tablo yazı boyutunu 18 yapar
-        table.setRowHeight(30); // Satır yüksekliğini artırarak daha okunaklı hale getirir
+        table.setFont(new Font("Arial", Font.BOLD, 18));
+        table.setRowHeight(30);
         frame.add(tableScrollPane, BorderLayout.CENTER);
 
         // 📌 Seçilen kahramanı yakalamak için event listener ekleniyor
@@ -60,47 +60,19 @@ public class SpawnHeroGuiView {
             }
         });
 
-        // 📌 "Seç ve Devam Et" butonu
-        JButton selectButton = new JButton("🎯 Select Hero"); // Butona emoji ekleyerek daha dikkat çekici hale getiriyoruz
-        selectButton.setFont(new Font("Arial", Font.BOLD, 18)); // Yazı fontunu büyüt
-        selectButton.setPreferredSize(new Dimension(200, 50)); // Butonun boyutunu ayarla
-        selectButton.setFocusPainted(false); // Tıklanınca kenar çizgisi olmaması için
+        // 📌 Butonlar (Seçme ve Yeni Kahraman Yaratma)
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        // 📌 Buton rengi ayarları
-        selectButton.setBackground(new Color(50, 150, 250)); // Mavi renk tonu
-        selectButton.setForeground(Color.BLUE); // Yazı rengini beyaz yap
-        selectButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Siyah çerçeve
+        JButton selectButton = new JButton("🎯 Select Hero");
+        styleButton(selectButton);
+        selectButton.addActionListener(e -> selectHero());
 
-        // 📌 Üzerine gelince renk değiştirme efekti
-        selectButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                selectButton.setBackground(new Color(30, 130, 230));
-            }
+        JButton createButton = new JButton("➕ Create New Hero");
+        styleButton(createButton);
+        createButton.addActionListener(e -> createNewHero());
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                selectButton.setBackground(new Color(50, 150, 250));
-            }
-        });
-
-        // 📌 Butona tıklanınca çalışacak işlem
-        selectButton.addActionListener(e -> {
-            if (heroSelectedOnRow != null) {
-                selectedHero = heroSelectedOnRow;
-                JOptionPane.showMessageDialog(frame, "🎉 Selected Hero: " + heroSelectedOnRow.getName(),
-                        "Hero Selected", JOptionPane.INFORMATION_MESSAGE);
-                frame.dispose(); // Pencereyi kapat
-            } else {
-                JOptionPane.showMessageDialog(frame, "⚠️ Please select a hero first!",
-                        "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-        });
-
-        // 📌 Butonu ortalamak için bir JPanel içine ekleyelim
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(selectButton);
+        buttonPanel.add(createButton);
 
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
@@ -113,7 +85,7 @@ public class SpawnHeroGuiView {
 
         for (int i = 0; i < heroesList.size(); i++) {
             data[i][0] = heroesList.get(i).getName();
-            data[i][1] = heroesList.get(i).getHeroClass();
+            data[i][1] = heroesList.get(i).getClass().getSimpleName();
             data[i][2] = heroesList.get(i).getLevel();
             data[i][3] = heroesList.get(i).getExperience();
         }
@@ -125,30 +97,96 @@ public class SpawnHeroGuiView {
             }
         };
 
-        // 📌 Başlık fontunu büyütme
         JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("Arial", Font.BOLD, 18)); // Büyük ve kalın font
-        header.setForeground(Color.BLUE); // Beyaz başlık yazısı
-        header.setBackground(Color.ORANGE); // Koyu gri arka plan
-        header.setReorderingAllowed(false); // Sütun sıralamasını kapat
+        header.setFont(new Font("Arial", Font.BOLD, 18));
+        header.setForeground(Color.BLUE);
+        header.setBackground(Color.ORANGE);
+        header.setReorderingAllowed(false);
 
         table.setModel(tableModel);
     }
 
+    // 📌 Seçili kahramanı belirleyen metot
+    private void selectHero() {
+        if (heroSelectedOnRow != null) {
+            selectedHero = heroSelectedOnRow;
+            JOptionPane.showMessageDialog(frame, "🎉 Selected Hero: " + heroSelectedOnRow.getName(),
+                    "Hero Selected", JOptionPane.INFORMATION_MESSAGE);
+            frame.dispose();
+        } else {
+            JOptionPane.showMessageDialog(frame, "⚠️ Please select a hero first!",
+                    "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    // 📌 Yeni kahraman yaratma süreci
+    private void createNewHero() {
+        String name = JOptionPane.showInputDialog(frame, "Enter new hero's name:", "Create Hero", JOptionPane.PLAIN_MESSAGE);
+
+        if (name == null || name.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "⚠️ Hero name cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (name.length() > 20) {
+            JOptionPane.showMessageDialog(frame, "⚠️ Hero name must be 20 characters or less!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String[] heroClasses = {"Rogue", "Warrior", "Mage"};
+        int choice = JOptionPane.showOptionDialog(frame, "Choose a Hero Class:",
+                "Hero Class Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, heroClasses, heroClasses[0]);
+
+        if (choice == -1) {
+            return; // Kullanıcı iptal etti
+        }
+
+        Hero newHero;
+        switch (choice) {
+            case 0 -> newHero = new Rogue(name);
+            case 1 -> newHero = new Warrior(name);
+            case 2 -> newHero = new Mage(name);
+            default -> throw new IllegalStateException("Unexpected value: " + choice);
+        }
+
+        heroManager.insertHero(
+                newHero.getName(),
+                newHero.getHeroClass(),
+                newHero.getLevel(),
+                newHero.getExperience(),
+                newHero.getAttack(),
+                newHero.getDefence(),
+                newHero.getHitPoints(),
+                newHero.getX(),
+                newHero.getY()
+        );
+
+        heroesList.add(newHero);
+        updateTable();
+        JOptionPane.showMessageDialog(frame, "🎉 Hero Created: " + newHero.getName(), "Success", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     // 📌 Kahramanın istatistiklerini gösteren metot
     private void displayHeroStats(Hero hero) {
-        ImageIcon icon = null;
+        // 📌 Varsayılan avatar belirle
+        ImageIcon icon = new ImageIcon("default_avatar.png"); // Eğer kahramanın avatarı yoksa bu kullanılacak
+
+        // 📌 Kahramanın özel avatarı varsa onu yükle
         if (hero.getAvatarPath() != null && !hero.getAvatarPath().isEmpty()) {
             ImageIcon originalIcon = new ImageIcon(hero.getAvatarPath());
             Image img = originalIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
             icon = new ImageIcon(img);
         }
 
+        // 📌 Avatarı bir JLabel içine koy
+        JLabel avatarLabel = new JLabel(icon);
+
         // 📌 Metin alanı oluştur
         JTextArea textArea = new JTextArea(
                 "Hero Stats:\n" +
                         "Name: " + hero.getName() + "\n" +
-                        "Class: " + hero.getHeroClass() + "\n" +
+                        "Class: " + hero.getClass().getSimpleName() + "\n" +
                         "Level: " + hero.getLevel() + "\n" +
                         "Attack: " + hero.getAttack() + "\n" +
                         "Defense: " + hero.getDefense() + "\n" +
@@ -159,12 +197,22 @@ public class SpawnHeroGuiView {
         textArea.setEditable(false);
         textArea.setOpaque(false);
 
-        // 📌 Panel oluştur
+        // 📌 Panel oluştur (Avatar sol tarafa, metin sağ tarafa)
         JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.add(new JLabel(icon), BorderLayout.WEST); // Avatar sol tarafta
-        panel.add(textArea, BorderLayout.CENTER); // Metin sağ tarafta
+        panel.add(avatarLabel, BorderLayout.WEST); // Avatar sol tarafta
+        panel.add(textArea, BorderLayout.CENTER);  // Metin sağ tarafta
 
         // 📌 JOptionPane ile göster
         JOptionPane.showMessageDialog(frame, panel, "Hero Stats", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // 📌 Butonları stilize eden metot
+    private void styleButton(JButton button) {
+        button.setFont(new Font("Arial", Font.BOLD, 18));
+        button.setPreferredSize(new Dimension(200, 50));
+        button.setFocusPainted(false);
+        button.setBackground(new Color(50, 150, 250));
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
 }

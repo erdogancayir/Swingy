@@ -18,7 +18,7 @@ public class HeroSpawnController
 
     public Hero OpenSpawnHeroGui() {
         if (isGuiMode) {
-            SpawnHeroGuiView spawnHeroGuiView = new SpawnHeroGuiView(heroManager.GetAllHeroesArrayList());
+            SpawnHeroGuiView spawnHeroGuiView = new SpawnHeroGuiView(heroManager.GetAllHeroesArrayList(), heroManager);
 
             // 📌 Kullanıcı seçim yapana kadar pencerenin kapanmasını bekle
             while (spawnHeroGuiView.getHeroSelectedOnRow() == null) {
