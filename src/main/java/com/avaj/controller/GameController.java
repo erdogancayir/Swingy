@@ -64,7 +64,19 @@ public class GameController
 
     public void startBattleForConsole(Enemy enemy) {
         BattleController battleController = new BattleController(hero, enemy, null, this);
-        battleController.startBattle();
+        boolean isVictory = battleController.startBattle();
+        if (isVictory)
+        {
+            heroManager.updateHeroStatus(
+                    hero.getName(),
+                    hero.getLevel(),
+                    hero.getExperience(),
+                    hero.getAttack(),
+                    hero.getDefense(),
+                    hero.getHitPoints(),
+                    hero.getX(),
+                    hero.getY());
+        }
     }
 
     public GameGuiView getGameGuiView() {

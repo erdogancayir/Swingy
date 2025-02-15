@@ -152,7 +152,7 @@ public class GameConsoleView {
             for (int j = 0; j < map.getSize(); j++) {
                 char symbol = map.getGrid(i, j);
                 if (hero.getX() == i && hero.getY() == j) {
-                    System.out.print(" H ");
+                    System.out.print(" H  ");
                 } else if (map.isEnemy(symbol)) {
                     System.out.print(" 👿 ");
                 } else if (symbol == 'A') {

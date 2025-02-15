@@ -134,6 +134,19 @@ public class SpawnHeroConsole {
         Hero selectedHero = selectHeroClass(name);
 
         System.out.println("\n🎉 New Hero Created! Welcome, " + name + " the " + selectedHero.getClass().getSimpleName() + "!");
+
+        heroManager.insertHero(
+                selectedHero.getName(),
+                selectedHero.getHeroClass(),
+                selectedHero.getLevel(),
+                selectedHero.getExperience(),
+                selectedHero.getAttack(),
+                selectedHero.getDefense(),
+                selectedHero.getHitPoints(),
+                selectedHero.getX(),
+                selectedHero.getY()
+        );
+
         return selectedHero;
     }
 

@@ -25,19 +25,20 @@ public class BattleController {
         this.scanner = new Scanner(System.in);
     }
 
-    public void startBattle() {
+    public boolean startBattle() {
         if (gameController.isGuiMode())
         {
             startBattleForGui();
         }
         else
         {
-            startBattleForConsole();
+            return startBattleForConsole();
         }
+        return true;
     }
 
 
-    private void startBattleForConsole() {
+    private boolean startBattleForConsole() {
         System.out.println("\n⚔️ Battle started! " + hero.getName() + " vs " + enemy.getClas());
 
         while (hero.getHitPoints() > 0 && enemy.getHitPoint() > 0) {
@@ -54,7 +55,7 @@ public class BattleController {
             if (enemy.getHitPoint() <= 0) {
                 System.out.println("\n🏆 " + hero.getName() + " won the battle!");
                 updateAfterVictory();
-                return;
+                return true;
             }
 
             // 📌 Düşmanın saldırısı
@@ -64,13 +65,15 @@ public class BattleController {
 
             if (hero.getHitPoints() <= 0) {
                 System.out.println("\n💀 " + hero.getName() + " has been defeated! Game Over.");
-                //gameController.getGameConsoleView().closeGame();
-                return;
+               System.exit(0); // 📌 Programı hemen kapat
+                return false;
             }
 
             // 📌 Güncellenmiş istatistikleri göster
             printBattleStats();
         }
+
+        return false;
     }
 
     private void printBattleStats() {
@@ -85,12 +88,6 @@ public class BattleController {
 
         hero.Heal(); // Kahramanı iyileştir
         System.out.println("💖 " + hero.getName() + " has been healed after the battle.");
-
-        var consoleView = gameController.getGameConsoleView();
-        if (consoleView != null)
-            consoleView.UpdateHeroStatAfterVictory(enemy);
-        else
-            System.out.println("Error: Console View is null");
     }
 
     private void startBattleForGui() {
