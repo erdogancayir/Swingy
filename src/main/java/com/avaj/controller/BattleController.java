@@ -22,6 +22,17 @@ public class BattleController {
     }
 
     public void startBattle() {
+        if (gameController.isGuiMode())
+        {
+            startBattleForGui();
+        }
+        else
+        {
+
+        }
+    }
+
+    private void startBattleForGui() {
         battleView.logMessage("⚔️ Battle started! " + hero.getName() + " vs " + enemy.getClas());
         battleView.updateStats(hero, enemy);
 
@@ -90,6 +101,6 @@ public class BattleController {
 
         };
 
-        battleWorker.execute(); //SwingWorker'ı başlatır ve arka planda çalıştırır.
+        battleWorker.execute(); //SwingWorker'ı başlatır ve arka planda çalıştırır
     }
 }

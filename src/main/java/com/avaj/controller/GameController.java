@@ -4,6 +4,7 @@ import com.avaj.database.HeroManager;
 import com.avaj.model.enemy.Enemy;
 import com.avaj.model.map.Map;
 import com.avaj.model.hero.*;
+import com.avaj.view.console.GameConsoleView;
 import com.avaj.view.gui.BattleGuiView;
 import com.avaj.view.gui.GameGuiView;
 
@@ -17,6 +18,7 @@ public class GameController
     private boolean isGuiMode;
     private ValidationController validationController;
     private GameGuiView gameGuiView;
+    private GameConsoleView gameConsoleView;
 
     public GameController(Map map, Hero hero, HeroManager heroManager, ValidationController validationController, boolean isGuiMode) {
         this.heroManager = heroManager;
@@ -36,11 +38,20 @@ public class GameController
         {
             OpenUi();
         }
+        else
+        {
+            OpenConsole();
+        }
     }
 
     public void OpenUi()
     {
         gameGuiView = new GameGuiView(hero, map, heroManager, this);
+    }
+
+    public void OpenConsole()
+    {
+        gameConsoleView = new GameConsoleView(hero, map, heroManager, this);
     }
 
     public void startBattle(Enemy enemy) {
@@ -53,5 +64,14 @@ public class GameController
 
     public GameGuiView getGameGuiView() {
         return gameGuiView;
+    }
+
+    public GameConsoleView getGameConsoleView() {
+        return gameConsoleView;
+    }
+
+    public boolean isGuiMode()
+    {
+        return isGuiMode;
     }
 }
