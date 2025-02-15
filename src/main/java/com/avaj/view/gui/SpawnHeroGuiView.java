@@ -64,15 +64,20 @@ public class SpawnHeroGuiView {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         JButton selectButton = new JButton("🎯 Select Hero");
-        styleButton(selectButton);
+        styleButton(selectButton, new Color(0, 153, 76), Color.GREEN); // Yeşil buton, Beyaz yazı
         selectButton.addActionListener(e -> selectHero());
 
         JButton createButton = new JButton("➕ Create New Hero");
-        styleButton(createButton);
+        styleButton(createButton, new Color(0, 102, 204), Color.BLUE); // Mavi buton, Beyaz yazı
         createButton.addActionListener(e -> createNewHero());
+
+        JButton deleteButton = new JButton("Delete Hero");
+        styleButton(deleteButton, Color.WHITE, Color.RED); // Beyaz buton, Kırmızı yazı
+        deleteButton.addActionListener(e -> deleteHero());
 
         buttonPanel.add(selectButton);
         buttonPanel.add(createButton);
+        buttonPanel.add(deleteButton);
 
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
@@ -104,6 +109,24 @@ public class SpawnHeroGuiView {
         header.setReorderingAllowed(false);
 
         table.setModel(tableModel);
+    }
+
+    // 📌 Kahraman silme süreci
+    private void deleteHero() {
+        if (heroSelectedOnRow == null) {
+            JOptionPane.showMessageDialog(frame, "⚠️ Please select a hero first!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(frame, "⚠️ Are you sure you want to delete " + heroSelectedOnRow.getName() + "?",
+                "Delete Confirmation", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            heroManager.removeHero(heroSelectedOnRow.getName());
+            heroesList.remove(heroSelectedOnRow);
+            updateTable();
+            JOptionPane.showMessageDialog(frame, "🗑️ Hero Deleted!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     // 📌 Seçili kahramanı belirleyen metot
@@ -206,13 +229,13 @@ public class SpawnHeroGuiView {
         JOptionPane.showMessageDialog(frame, panel, "Hero Stats", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // 📌 Butonları stilize eden metot
-    private void styleButton(JButton button) {
-        button.setFont(new Font("Arial", Font.BOLD, 18));
-        button.setPreferredSize(new Dimension(200, 50));
+    // 📌 Butonları stilize eden metot (Artık yazı rengini de parametre olarak alıyor)
+    private void styleButton(JButton button, Color bgColor, Color textColor) {
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setPreferredSize(new Dimension(180, 40));
         button.setFocusPainted(false);
-        button.setBackground(new Color(50, 150, 250));
-        button.setForeground(Color.WHITE);
+        button.setBackground(bgColor);
+        button.setForeground(textColor); // 📌 Yazı rengi burada ayarlandı!
         button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
 }
