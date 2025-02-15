@@ -1,15 +1,13 @@
 package com.avaj.view.console;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.avaj.database.HeroManager;
 import com.avaj.model.hero.Hero;
 import com.avaj.model.hero.Mage;
 import com.avaj.model.hero.Rogue;
 import com.avaj.model.hero.Warrior;
-
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class SpawnHeroConsole {
     private final ArrayList<Hero> heroesList;
@@ -27,6 +25,11 @@ public class SpawnHeroConsole {
 
         System.out.println("\n🎮 Welcome to the Hero Selection!");
         do {
+            if (heroesList.isEmpty()) {
+                System.out.println("\n⚠️ No heroes available. Please create a new hero!\n");
+                return createNewHero();
+            }
+
             System.out.println("Choose your hero by entering a number:");
             System.out.println("Enter '0' to CREATE a new hero.");
             System.out.println("Enter a NEGATIVE number to DELETE a hero permanently.");
@@ -85,7 +88,7 @@ public class SpawnHeroConsole {
 
     private void printHeroStats(Hero hero) {
         System.out.printf("Name: %-20s  Class: %-10s  Level: %-5d  EXP: %-5d\n",
-                hero.getName(), hero.getHeroClass(), hero.getLevel(), hero.getExperience());
+                hero.getName(), hero.getClass().getSimpleName(), hero.getLevel(), hero.getExperience());
         System.out.println("HP: " + hero.getHitPoints() + "  Attack: " + hero.getAttack() + "  Defence: " + hero.getDefence());
     }
 
@@ -108,9 +111,10 @@ public class SpawnHeroConsole {
         }
 
         Hero heroToDelete = heroesList.get(index);
-        heroManager.deleteHero(heroToDelete);
         System.out.printf("\n⚠️ Are you sure you want to DELETE '%s' forever? (Yes/No):> ", heroToDelete.getName());
+
         if (scanYesOrNo()) {
+            heroManager.removeHero(heroToDelete.getName());
             heroesList.remove(index);
             System.out.println("🗑️ Hero has been removed successfully!");
         } else {
