@@ -15,13 +15,13 @@ public class HeroManager extends DbInterface {
 
         createHeroesTable();
 
-        Warrior warrior = new Warrior("Warrior");
-        Mage mage = new Mage("Mage");
-        Rogue rogue = new Rogue("Rogue");
-
-        AddHeroToDb(warrior);
-        AddHeroToDb(mage);
-        AddHeroToDb(rogue);
+//        Warrior warrior = new Warrior("Warrior");
+//        Mage mage = new Mage("Mage");
+//        Rogue rogue = new Rogue("Rogue");
+//
+//        AddHeroToDb(warrior);
+//        AddHeroToDb(mage);
+//        AddHeroToDb(rogue);
     }
 
     public void createHeroesTable() {
