@@ -108,7 +108,7 @@ public class GameConsoleView {
         }
 
         if (enemy != null) {
-            gameController.startBattle(enemy);
+            gameController.startBattleForConsole(enemy);
         }
 
         if (enemy.getHitPoint() <= 0) {
@@ -152,7 +152,7 @@ public class GameConsoleView {
             for (int j = 0; j < map.getSize(); j++) {
                 char symbol = map.getGrid(i, j);
                 if (hero.getX() == i && hero.getY() == j) {
-                    System.out.print(" 🏅 ");
+                    System.out.print(" H ");
                 } else if (map.isEnemy(symbol)) {
                     System.out.print(" 👿 ");
                 } else if (symbol == 'A') {
@@ -197,6 +197,26 @@ public class GameConsoleView {
                 return input;
             }
             System.out.printf("❌ Please enter a number between %d and %d:> ", min, max);
+        }
+    }
+
+    public void UpdateHeroStatAfterVictory(Enemy enemy)
+    {
+        if (enemy.getHitPoint() <= 0) { // Düşman öldüyse
+            int xpGained = enemy.getStrength() * 500; // Düşman seviyesine bağlı XP hesapla
+            hero.gainExperience(xpGained); // Kahramana XP ekle
+
+            hero.Heal();
+            heroManager.updateHeroStatus(
+                    hero.getName(),
+                    hero.getLevel(),
+                    hero.getExperience(),
+                    hero.getAttack(),
+                    hero.getDefense(),
+                    hero.getHitPoints(),
+                    hero.getX(),
+                    hero.getY()
+            );
         }
     }
 }

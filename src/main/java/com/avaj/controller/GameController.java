@@ -54,12 +54,17 @@ public class GameController
         gameConsoleView = new GameConsoleView(hero, map, heroManager, this);
     }
 
-    public void startBattle(Enemy enemy) {
+    public void startBattleForUi(Enemy enemy) {
         SwingUtilities.invokeLater(() -> {
             BattleGuiView battleView = new BattleGuiView(hero, enemy);
             BattleController battleController = new BattleController(hero, enemy, battleView, this);
             battleController.startBattle();
         });
+    }
+
+    public void startBattleForConsole(Enemy enemy) {
+        BattleController battleController = new BattleController(hero, enemy, null, this);
+        battleController.startBattle();
     }
 
     public GameGuiView getGameGuiView() {

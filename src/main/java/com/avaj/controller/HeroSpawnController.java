@@ -39,6 +39,18 @@ public class HeroSpawnController
             SpawnHeroConsole spawnHeroConsole = new SpawnHeroConsole(heroManager.GetAllHeroesArrayList(), heroManager);
             Hero hero = spawnHeroConsole.spawnHero();
 
+            heroManager.insertHero(
+                    hero.getName(),
+                    hero.getHeroClass(),
+                    hero.getLevel(),
+                    hero.getExperience(),
+                    hero.getAttack(),
+                    hero.getDefense(),
+                    hero.getHitPoints(),
+                    hero.getX(),
+                    hero.getY()
+            );
+
             return hero;
         }
     }
