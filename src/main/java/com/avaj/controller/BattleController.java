@@ -49,6 +49,8 @@ public class BattleController {
 
             // 📌 Kahramanın saldırısı
             int heroDamage = Math.max(0, (hero.getAttack() + diceRoll) - enemy.getDefence());
+            if (heroDamage <= 4) // for 0 damage
+                heroDamage = 5;
             enemy.takeDamage(heroDamage);
             System.out.println("🗡️ " + hero.getName() + " attacks for " + heroDamage + " damage.");
 
@@ -60,6 +62,8 @@ public class BattleController {
 
             // 📌 Düşmanın saldırısı
             int enemyDamage = Math.max(0, enemy.getAttack() - hero.getDefence());
+            if (enemyDamage <= 4) // for 0 damage
+                enemyDamage = 5;
             hero.takeDamage(enemyDamage);
             System.out.println("💥 " + enemy.getClas() + " attacks for " + enemyDamage + " damage.");
 
@@ -102,6 +106,8 @@ public class BattleController {
                     publish("🎲 Rolled: " + diceRoll);
 
                     int heroDamage = Math.max(0, (hero.getAttack() + diceRoll) - enemy.getDefence());
+                    if (heroDamage <= 4) // for 0 damage
+                        heroDamage = 5;
                     enemy.takeDamage(heroDamage);
                     publish("🗡️ " + hero.getName() + " attacks for " + heroDamage + " damage.");
 
@@ -111,6 +117,8 @@ public class BattleController {
                     }
 
                     int enemyDamage = Math.max(0, enemy.getAttack() - hero.getDefence());
+                    if (enemyDamage <= 4) // for 0 damage
+                        enemyDamage = 5;
                     hero.takeDamage(enemyDamage);
                     publish("💥 " + enemy.getClas() + " attacks for " + enemyDamage + " damage.");
 
