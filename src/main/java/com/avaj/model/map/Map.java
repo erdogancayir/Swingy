@@ -34,11 +34,14 @@ public class Map
         placeRandomEntities(ZombieGirlEnemy, size / 5);
         placeRandomEntities(ZombieGirlEnemy, size / 5);
         placeRandomEntities(ZombieGirlEnemy, size / 5);
+        placeRandomEntities(ZombieGirlEnemy, size / 5);
         placeRandomEntities(BlueEnemy, size / 5);
         placeRandomEntities(BlueEnemy, size / 5);
         placeRandomEntities(GreenEnemy, size / 5);
         placeRandomEntities(GreenEnemy, size / 5);
         placeRandomEntities(PurpleVILLAIN, size / 5);
+        placeRandomEntities(PurpleVILLAIN, size / 5);
+        placeRandomEntities(ZombieGuyVILLAIN, size / 5);
         placeRandomEntities(ZombieGuyVILLAIN, size / 5);
         placeRandomEntities(ZombieGuyVILLAIN, size / 5);
         placeRandomEntities(ARTIFACT, size / 3);
@@ -102,6 +105,9 @@ public class Map
             int x = random.nextInt(size);
             int y = random.nextInt(size);
 
+            if (isCellAtBorder(x, y))
+                continue;
+
             grid[x][y] = entity;
         }
     }
@@ -146,6 +152,10 @@ public class Map
 
     public boolean isHeroAtBorder() {
         return hero.getX() == 0 || hero.getX() == size - 1 || hero.getY() == 0 || hero.getY() == size - 1;
+    }
+
+    public boolean isCellAtBorder(int x, int y) {
+        return x == 0 || x == size - 1 || y == 0 || y == size - 1;
     }
 
     public int getSize() {
