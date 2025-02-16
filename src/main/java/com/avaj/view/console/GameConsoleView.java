@@ -164,9 +164,9 @@ public class GameConsoleView {
                     System.out.print(" ❌ ");
                 }
                 else if (hero.getX() == i && hero.getY() == j) {
-                    System.out.print(" H  ");
+                    System.out.print(" H ");
                 } else if (map.isEnemy(symbol)) {
-                    System.out.print(" 👿 ");
+                    System.out.print(" 👿");
                 } else if (symbol == 'A') {
                     System.out.print(" ✨ ");
                 } else {
