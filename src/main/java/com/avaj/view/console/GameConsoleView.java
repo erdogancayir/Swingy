@@ -8,6 +8,7 @@ import com.avaj.model.hero.Hero;
 import com.avaj.model.map.Direction;
 import com.avaj.model.map.Map;
 
+import javax.swing.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -88,6 +89,14 @@ public class GameConsoleView {
             }
 
             map.moveHero(direction, heroManager);
+
+            if (map.isHeroAtBorder())
+            {
+                System.out.println("You hit the border. Try Again!");
+                int position = map.getSize() / 2;
+                heroManager.updateHeroPosition(hero.getName(), position, position);
+                System.exit(0); // 📌 Programı hemen kapat
+            }
         } else {
             System.out.println("⛔ Cannot move there!");
         }
@@ -152,7 +161,7 @@ public class GameConsoleView {
             for (int j = 0; j < map.getSize(); j++) {
                 char symbol = map.getGrid(i, j);
                 if (!map.isVisible(i, j)) {
-                    System.out.print(" ❌1 ");
+                    System.out.print(" ❌ ");
                 }
                 else if (hero.getX() == i && hero.getY() == j) {
                     System.out.print(" H  ");

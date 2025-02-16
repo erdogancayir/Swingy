@@ -61,7 +61,7 @@ public class Map
         }
     }
 
-    private void updateVisibility() {
+    public void updateVisibility() {
         // 📌 Önce tüm haritayı kapat
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -91,7 +91,7 @@ public class Map
     }
 
 
-    private void placeHeroAtCenter(int x, int y) {
+    public void placeHeroAtCenter(int x, int y) {
         hero.setPosition(x, y);
         grid[x][y] = HERO;
         visibility[x][y] = true; // Kahramanın başladığı nokta görülebilir
@@ -126,7 +126,7 @@ public class Map
         updateVisibility(); // 🔥 Hareket sonrası görüş alanını güncelle
     }
 
-    private void updateHeroPosition(int newX, int newY) {
+    public void updateHeroPosition(int newX, int newY) {
         grid[hero.getX()][hero.getY()] = EMPTY;
         hero.setPosition(newX, newY);
         grid[newX][newY] = HERO;
