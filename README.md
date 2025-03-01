@@ -1,7 +1,5 @@
 # Swingy - A Text-Based RPG with Java Swing
 
-![Swingy RPG](https://example.com/banner.png) <!-- Replace with actual banner if available -->
-
 ## 📖 Overview
 
 **Swingy** is a text-based RPG built using Java and the Swing framework. It is the second project in the Java series at **42** and focuses on GUI programming while adhering to **best software design principles**.
